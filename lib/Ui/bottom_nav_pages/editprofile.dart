@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sta/Ui/bottom_nav_pages/bottom_navbar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+// ignore: must_be_immutable
 class EdetinProfile extends StatelessWidget {
   EdetinProfile({Key? key}) : super(key: key);
 
@@ -40,13 +41,13 @@ class EdetinProfile extends StatelessWidget {
               onPressed: () {
                 UpdateData();
               },
-              color: Colors.green,
+              color: Color.fromARGB(255, 109, 163, 111),
               padding: const EdgeInsets.symmetric(horizontal: 50),
               elevation: 2,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
               child: const Text(
-                "SAVE",
+                "Save!",
                 style: TextStyle(
                     fontSize: 14, letterSpacing: 2.2, color: Colors.white),
               ),
