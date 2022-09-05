@@ -4,21 +4,21 @@ import 'package:flutter/material.dart';
 class bottomnavbardetail extends StatelessWidget {
   var _produits;
    VoidCallback  press ;
-  bottomnavbardetail(this._produits,this.press, {required } );
+  bottomnavbardetail(this._produits,this.press, {Key? key, required } ) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
         child: Container(
       height: 70,
-      padding: EdgeInsets.symmetric(horizontal: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
           boxShadow: [
             BoxShadow(
                 color: Colors.grey.withOpacity(0.6),
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
                 spreadRadius: 8,
                 blurRadius: 2)
           ]),
@@ -39,7 +39,7 @@ class bottomnavbardetail extends StatelessWidget {
                   Colors.white,
                 ),
                 backgroundColor: MaterialStateProperty.all<Color>(
-                    Color.fromARGB(255, 174, 202, 175)),
+                  const   Color.fromARGB(255, 174, 202, 175)),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)))),

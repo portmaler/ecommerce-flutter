@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,8 +10,8 @@ import 'package:photo_view/photo_view.dart';
 
 // ignore: must_be_immutable
 class DetailProduit extends StatefulWidget {
-   // ignore: prefer_final_fields, prefer_typing_uninitialized_variables
-   var _produits;
+  // ignore: prefer_final_fields, prefer_typing_uninitialized_variables
+  var _produits;
   DetailProduit(this._produits, {Key? key}) : super(key: key);
 
   @override
@@ -34,6 +33,7 @@ class _DetailProduitState extends State<DetailProduit> {
       "prix": widget._produits["prix"],
       "img": widget._produits["img"],
     }).then((value) {
+      print("add");
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const Carts()));
     });
@@ -44,7 +44,7 @@ class _DetailProduitState extends State<DetailProduit> {
     Colors.orange,
     Colors.green,
     // Colors.black,
-    Color.fromARGB(255, 5, 60, 85),
+    const Color.fromARGB(255, 5, 60, 85),
     Colors.grey,
     Colors.indigo,
     Colors.white
@@ -104,6 +104,7 @@ class _DetailProduitState extends State<DetailProduit> {
           ],
         ),
         body: SafeArea(
+          // ignore: avoid_unnecessary_containers
           child: Container(
             child: Column(
               children: [
