@@ -10,6 +10,7 @@ import 'package:flutter_sta/Ui/View/Registre.dart';
 import 'package:flutter_sta/Ui/bottom_nav_pages/bottom_navbar.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -26,9 +27,12 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _passwordController = TextEditingController();
   static Future<User?> loginUsingEmailPassword(
-      {required String email,
+       {
+      required String email,
       required String password,
-      required BuildContext context}) async {
+      required BuildContext context
+      }
+      ) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
@@ -257,15 +261,20 @@ class _LoginPageState extends State<LoginPage> {
                                 log(user.toString());
                                 //SharedPref.savedToken(user.toString());
 
-                                if (_formKey.currentState!.validate()) 
-                                  // if (user == null) {
-                                  //   Fluttertoast.showToast(
-                                  //       msg:
-                                  //           "plaise saisire votre email et votre mot de passe  .",
-                                  //       backgroundColor: const Color.fromARGB(
-                                  //           255, 214, 143, 143));
-                                  // }
-                                
+                                var token = user.toString();
+                                SharedPreferences pref =
+                                    await SharedPreferences.getInstance();
+                                pref.setString("token", token);
+
+                                if (_formKey.currentState!.validate())
+                                // if (user == null) {
+                                //   Fluttertoast.showToast(
+                                //       msg:
+                                //           "plaise saisire votre email et votre mot de passe  .",
+                                //       backgroundColor: const Color.fromARGB(
+                                //           255, 214, 143, 143));
+                                // }
+
                                 // ignore: curly_braces_in_flow_control_structures
                                 if (user != null) {
                                   {

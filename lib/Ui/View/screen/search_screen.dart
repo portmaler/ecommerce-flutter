@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class favorite extends StatefulWidget {
-  const favorite({Key? key}) : super(key: key);
+class Search extends StatefulWidget {
+  var inputtext = "";
+  Search(this.inputtext);
 
   @override
-  State<favorite> createState() => _favoriteState();
+  State<Search> createState() => _SearchState();
 }
 
-class _favoriteState extends State<favorite> {
-  var inputtext = "";
+class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,8 +21,8 @@ class _favoriteState extends State<favorite> {
             TextFormField(
               onChanged: (value) {
                 setState(() {
-                  inputtext = value;
-                  print(inputtext);
+                  widget.inputtext = value;
+                  print(widget.inputtext);
                 });
               },
             ),
@@ -31,7 +31,7 @@ class _favoriteState extends State<favorite> {
               child: StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection("produits")
-                      .where("name", isLessThanOrEqualTo: inputtext)
+                      .where("name".toString().toLowerCase())
                       .snapshots(),
                   builder: (BuildContext context,
                       AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -47,22 +47,17 @@ class _favoriteState extends State<favorite> {
                         ),
                       );
                     }
-                    return Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: ListView(
-                        children:
-                            snapshot.data!.docs.map((DocumentSnapshot doc) {
-                          Map<String, dynamic> data =
-                              doc.data() as Map<String, dynamic>;
-                          return Card(
-                            elevation: 5,
-                            child: ListTile(
-                              title: Text(data["name"]),
-                              leading: Image.network(data["img"]),
-                            ),
-                          );
-                        }).toList(),
-                      ),
+                    return ListView(
+                      children: snapshot.data!.docs.map((DocumentSnapshot doc) {
+                       
+                        return Card(
+                          elevation: 5,
+                          child: ListTile(
+                            title: Text(doc["name"]),
+                            leading: Image.network(doc["img"]),
+                          ),
+                        );
+                      }).toList(),
                     );
                   }),
             ))
