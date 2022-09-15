@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_sta/Ui/View/Registre.dart';
 
 import 'package:flutter_sta/Ui/bottom_nav_pages/bottom_navbar.dart';
+import 'package:flutter_sta/Ui/controller/autaicontroller.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,12 +28,9 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _passwordController = TextEditingController();
   static Future<User?> loginUsingEmailPassword(
-       {
-      required String email,
+      {required String email,
       required String password,
-      required BuildContext context
-      }
-      ) async {
+      required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try {
@@ -51,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 174, 202, 175),
       body: SafeArea(
@@ -72,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.transparent,
                         )),
                     Text(
-                      "Sign Up",
+                      "login",
                       style: TextStyle(
                           fontSize: 40, letterSpacing: 1, color: Colors.white),
                     ),
@@ -261,10 +260,10 @@ class _LoginPageState extends State<LoginPage> {
                                 log(user.toString());
                                 //SharedPref.savedToken(user.toString());
 
-                                var token = user.toString();
-                                SharedPreferences pref =
-                                    await SharedPreferences.getInstance();
-                                pref.setString("token", token);
+                                // var token = user.toString();
+                                // SharedPreferences pref =
+                                //     await SharedPreferences.getInstance();
+                                // pref.setString("token", token);
 
                                 if (_formKey.currentState!.validate())
                                 // if (user == null) {
@@ -278,6 +277,11 @@ class _LoginPageState extends State<LoginPage> {
                                 // ignore: curly_braces_in_flow_control_structures
                                 if (user != null) {
                                   {
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    prefs.setString("userId", user.uid);
+                                    print(user.uid);
+
                                     Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
                                             builder: (context) =>

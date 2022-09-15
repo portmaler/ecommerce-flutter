@@ -1,9 +1,11 @@
-
- import 'dart:async';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_sta/Ui/View/Login_page.dart';
-
+import 'package:flutter_sta/Ui/View/route.dart';
+import 'package:flutter_sta/Ui/bottom_nav_pages/bottom_navbar.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScren extends StatefulWidget {
   const SplashScren({Key? key}) : super(key: key);
@@ -14,11 +16,18 @@ class SplashScren extends StatefulWidget {
 
 class _SplashScrenState extends State<SplashScren> {
   @override
-  void initState() {
-    Timer(
-        const Duration(seconds: 1),
-        () => Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const LoginPage())));
+  void initState()  {
+    Timer(const Duration(microseconds: 300), () async {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString("userId");
+      if (token != null) {
+        print("token : $token");
+        Get.to(const BottomNavBar());
+      } else {
+        Get.to(LoginPage());
+      }
+    });
+
     super.initState();
   }
 

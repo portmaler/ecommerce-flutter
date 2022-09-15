@@ -55,15 +55,8 @@ class _HomeState extends State<Home> {
     return qrs.docs;
   }
 
-  String? token;
-  getToken() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    token = prefs.getString("token")!;
-  }
-
   @override
   void initState() {
-    getToken();
     fetchCarouselImages();
     fetchProduit();
     super.initState();
@@ -142,7 +135,10 @@ class _HomeState extends State<Home> {
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20),
                                 image: DecorationImage(
-                                    image: NetworkImage(item),
+                                    // ignore: prefer_if_null_operators
+                                    image: NetworkImage(item == null
+                                        ? "https://th.bing.com/th/id/R.7f237840c85659e37e38a4d5241592bc?rik=k%2bi3firSUwbJSQ&riu=http%3a%2f%2fi2.cdscdn.com%2fpdt2%2f1%2f0%2f6%2f1%2f700x700%2f343902106%2frw%2fnike-baskets-air-max-skyline-homme.jpg&ehk=e71qqDIaajnZzXOBFa1NXKN6gNRJdPRLU%2fJd8AJ8ET4%3d&risl=&pid=ImgRaw&r=0"
+                                        : item),
                                     fit: BoxFit.cover)),
                           ),
                           Padding(

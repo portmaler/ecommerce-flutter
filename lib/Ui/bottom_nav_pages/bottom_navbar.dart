@@ -14,8 +14,8 @@ class BottomNavBar extends StatefulWidget {
 class _BottomNavBarState extends State<BottomNavBar> {
   final _pages = [
     const Home(),
-    const favorite(),
-    const Carts(),
+    const Favorite(),
+      Carts(),
     const Profile(),
   ];
   int _currentIndex = 0;

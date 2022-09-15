@@ -5,7 +5,10 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sta/Ui/View/Login_page.dart';
 import 'package:flutter_sta/Ui/bottom_nav_pages/editprofile.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -58,6 +61,14 @@ class _ProfileState extends State<Profile> {
         color: Color(0xFF202E2E),
       ),
     ));
+  }
+
+  Future<void> logoutUser() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+    await _auth.signOut();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+    Get.offAll(LoginPage());
   }
 
   @override
@@ -145,10 +156,42 @@ class _ProfileState extends State<Profile> {
                       fontWeight: FontWeight.w400,
                       color: Color(0xFF8492A2),
                     ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Expanded(
+                    child: Container(
+                        height: 50,
+                        child: TextButton(
+                          onPressed: logoutUser,
+                          child: Text(
+                            "lougout",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        color: Colors.orange),
                   )
+
+                  // Container(
+                  //   height: 100,
+                  //   child: ElevatedButton(
+                  //     onPressed: logoutUser,
+                  //     style: ElevatedButton.styleFrom(
+                  //         primary: const Color.fromARGB(255, 174, 202, 175),
+                  //         // padding: const EdgeInsets.symmetric(
+                  //         //     horizontal: 50, vertical: 10),
+                  //         shape: RoundedRectangleBorder(
+                  //             borderRadius: BorderRadius.circular(20))),
+                  //     child: const Text(
+                  //       "logout",
+                  //       style: TextStyle(color: Colors.white, fontSize: 27),
+                  //     ),
+                  //   ),
+                  // )
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

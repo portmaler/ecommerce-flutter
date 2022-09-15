@@ -37,22 +37,27 @@ class _CartsState extends State<Carts> {
             padding: const EdgeInsets.all(14.0),
             child: Center(
               child: Badge(
-                badgeContent: StreamBuilder(
+                badgeContent: StreamBuilder<
+                        QuerySnapshot<Map<String, dynamic>>>(
                     stream: FirebaseFirestore.instance
                         .collection("users-cart-items")
                         .doc(FirebaseAuth.instance.currentUser!.email)
                         .collection("items")
                         .snapshots(),
-                    builder: (context, snapshot) {
-                      String count = "0";
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasError) {
-                        count = "0";
+                        Text("Errour");
                       }
                       if (!snapshot.hasData) {
-                        count = "0";
+                        const Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.amber,
+                          ),
+                        );
                       }
-                      count = (snapshot.data as List).length.toString();
-                      return Text(count);
+                      // count = (snapshot.data as List).length.toString();
+                      // log(snapshot.data!.docs.length.toString());
+                      return Text(snapshot.data?.docs.length.toString() ?? "");
                     }),
                 animationDuration: const Duration(milliseconds: 300),
                 child: const Icon(Icons.shopping_bag_outlined),
@@ -130,7 +135,7 @@ class _CartsState extends State<Carts> {
                                       .collection("items")
                                       .doc(_documentSnapshot.id)
                                       .delete();
-                                  cart.removecounter();
+                                  //cart.removecounter();
                                 });
                               },
                               child: Row(
