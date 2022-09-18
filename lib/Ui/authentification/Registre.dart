@@ -1,55 +1,56 @@
-// ignore: file_names
-import 'dart:developer';
-
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_sta/Ui/View/Registre.dart';
+import 'package:flutter_sta/Ui/authentification/Login_page.dart';
 
-import 'package:flutter_sta/Ui/bottom_nav_pages/bottom_navbar.dart';
-import 'package:flutter_sta/Ui/controller/autaicontroller.dart';
-
+import 'package:flutter_sta/Ui/View/user_data.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class Registre extends StatefulWidget {
+  const Registre({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<Registre> createState() => _RegistreState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegistreState extends State<Registre> {
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
 
   final TextEditingController _emailController = TextEditingController();
 
   final TextEditingController _passwordController = TextEditingController();
-  static Future<User?> loginUsingEmailPassword(
-      {required String email,
-      required String password,
-      required BuildContext context}) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    User? user;
+  signUp() async {
     try {
-      UserCredential userCredential = await auth.signInWithEmailAndPassword(
-          email: email, password: password);
-      user = userCredential.user;
-    } on FirebaseAuthException catch (e) {
-      if (e.code == "user-not-found") {
-        //print("No User found for that email");
-        Fluttertoast.showToast(
-            msg: "No User found for that email", backgroundColor: Colors.red);
+      UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: _emailController.text,
+               password: _passwordController.text);
+      var authCredential = userCredential.user;
+      print(authCredential!.uid);
+      if (authCredential.uid.isNotEmpty) {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const UserForm()));
+      } else {
+        Fluttertoast.showToast(msg: "Somthing is wrong");
       }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        // print('The password provided is too weak.');
+        Fluttertoast.showToast(msg: " The password provided is too weak.");
+      } else if (e.code == 'email-already-in-use') {
+        Fluttertoast.showToast(
+            msg: " The account already exists for that email.",
+            backgroundColor: Colors.red);
+      }
+    } catch (e) {
+      print(e);
     }
-    return user;
   }
 
   @override
   Widget build(BuildContext context) {
-   
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 174, 202, 175),
       body: SafeArea(
@@ -71,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                           color: Colors.transparent,
                         )),
                     Text(
-                      "login",
+                      "Sign IN",
                       style: TextStyle(
                           fontSize: 40, letterSpacing: 1, color: Colors.white),
                     ),
@@ -101,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: 20,
                           ),
                           Text(
-                            "Welcom Buddy ! ",
+                            "Welcom back ! ",
                             style: TextStyle(
                                 fontSize: 22, color: Colors.green.shade100),
                           ),
@@ -109,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                             height: 19,
                           ),
                           const Text(
-                            "AGADIIR FATIMA",
+                            "aytsjel  crecc cont",
                             style: TextStyle(fontSize: 14),
                           ),
                           const SizedBox(
@@ -138,8 +139,8 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               Expanded(
                                 child: TextFormField(
-                                  keyboardType: TextInputType.emailAddress,
                                   controller: _emailController,
+                                  keyboardType: TextInputType.emailAddress,
                                   decoration: const InputDecoration(
                                       hintText: "fati@gmail.com",
                                       hintStyle: TextStyle(
@@ -195,7 +196,6 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               Expanded(
                                 child: TextFormField(
-                                  keyboardType: TextInputType.text,
                                   controller: _passwordController,
                                   validator: (value) {
                                     if (value!.isEmpty || value.length < 8) {
@@ -246,48 +246,8 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           Center(
                             child: ElevatedButton(
-                              onPressed: () async {
-                                // Navigator.of(context).pushReplacement(
-                                //       MaterialPageRoute(
-                                //           builder: (context) =>
-                                //               const BottomNavBar()));
-                                User? user = await loginUsingEmailPassword(
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                    context: context);
-                                log(_emailController.text);
-                                log(_passwordController.text);
-                                log(user.toString());
-                                //SharedPref.savedToken(user.toString());
-
-                                // var token = user.toString();
-                                // SharedPreferences pref =
-                                //     await SharedPreferences.getInstance();
-                                // pref.setString("token", token);
-
-                                if (_formKey.currentState!.validate())
-                                // if (user == null) {
-                                //   Fluttertoast.showToast(
-                                //       msg:
-                                //           "plaise saisire votre email et votre mot de passe  .",
-                                //       backgroundColor: const Color.fromARGB(
-                                //           255, 214, 143, 143));
-                                // }
-
-                                // ignore: curly_braces_in_flow_control_structures
-                                if (user != null) {
-                                  {
-                                    SharedPreferences prefs =
-                                        await SharedPreferences.getInstance();
-                                    prefs.setString("userId", user.uid);
-                                    print(user.uid);
-
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const BottomNavBar()));
-                                  }
-                                }
+                              onPressed: () {
+                                signUp();
                               },
                               style: ElevatedButton.styleFrom(
                                   primary:
@@ -297,7 +257,7 @@ class _LoginPageState extends State<LoginPage> {
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20))),
                               child: const Text(
-                                "Login",
+                                "Continue",
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 27),
                               ),
@@ -306,32 +266,21 @@ class _LoginPageState extends State<LoginPage> {
                           const SizedBox(
                             height: 18,
                           ),
-                          Row(
-                            children: [
-                              const Text(
-                                "d'ont have an account ? ",
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const LoginPage()));
+                              },
+                              child: const Text(
+                                "Connexion",
                                 style: TextStyle(
-                                    fontSize: 19,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w400),
-                              ),
-                              TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                const Registre()));
-                                  },
-                                  child: const Text(
-                                    "Sign IN ",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(255, 174, 202, 175),
-                                    ),
-                                  ))
-                            ],
-                          )
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Color.fromARGB(255, 174, 202, 175),
+                                ),
+                              ))
                         ],
                       ),
                     ),

@@ -6,7 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:flutter_sta/Core/Widget/Cart_provder.dart';
+import 'package:flutter_sta/Core/providers/Cart_provder.dart';
 import 'package:flutter_sta/Ui/bottom_nav_pages/bottom_navbar.dart';
 import 'package:flutter_sta/Ui/bottom_nav_pages/bottomnavbardetail.dart';
 import 'package:photo_view/photo_view.dart';

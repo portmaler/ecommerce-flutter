@@ -5,8 +5,8 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sta/Ui/View/Login_page.dart';
-import 'package:flutter_sta/Ui/bottom_nav_pages/editprofile.dart';
+import 'package:flutter_sta/Ui/authentification/Login_page.dart';
+import 'package:flutter_sta/Ui/pages/editprofile.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

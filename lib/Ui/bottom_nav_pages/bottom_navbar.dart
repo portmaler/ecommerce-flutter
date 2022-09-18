@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sta/Ui/bottom_nav_pages/cart.dart';
-import 'package:flutter_sta/Ui/bottom_nav_pages/favorite.dart';
-import 'package:flutter_sta/Ui/bottom_nav_pages/home.dart';
-import 'package:flutter_sta/Ui/bottom_nav_pages/profile.dart';
+import 'package:flutter_sta/Ui/pages/cart.dart';
+import 'package:flutter_sta/Ui/pages/favorite.dart';
+import 'package:flutter_sta/Ui/pages/home.dart';
+import 'package:flutter_sta/Ui/pages/profile.dart';
 
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);

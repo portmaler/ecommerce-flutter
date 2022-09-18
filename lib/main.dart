@@ -1,14 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_sta/Core/Widget/Cart_provder.dart';
-import 'package:flutter_sta/Ui/View/Login_page.dart';
-
-import 'package:flutter_sta/Ui/View/screen/SplashScren.dart';
-import 'package:flutter_sta/Ui/bottom_nav_pages/bottom_navbar.dart';
-import 'package:flutter_sta/Ui/bottom_nav_pages/home.dart';
+import 'package:flutter_sta/Core/providers/Cart_provder.dart';
+import 'package:flutter_sta/Ui/View/SplashScren.dart';
 import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

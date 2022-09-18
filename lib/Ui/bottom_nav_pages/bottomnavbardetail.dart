@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sta/Ui/bottom_nav_pages/detailproduct.dart';
+import 'package:flutter_sta/Ui/pages/detailproduct.dart';
 
 class bottomnavbardetail extends StatelessWidget {
   var _produits;

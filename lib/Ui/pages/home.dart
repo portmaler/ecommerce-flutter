@@ -1,9 +1,15 @@
+import 'package:badges/badges.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sta/Ui/View/screen/search_screen.dart';
-import 'package:flutter_sta/Ui/bottom_nav_pages/detailproduct.dart';
+import 'package:flutter_sta/Ui/View/search_screen.dart';
+import 'package:flutter_sta/Ui/pages/cart.dart';
+import 'package:flutter_sta/Ui/pages/detailproduct.dart';
+import 'package:flutter_sta/util/size_config.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Home extends StatefulWidget {
@@ -72,6 +78,55 @@ class _HomeState extends State<Home> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
+              padding: EdgeInsets.symmetric(
+                  horizontal: getProportionateScreenWidth(20)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SearchField(),
+                  Padding(
+                    padding: const EdgeInsets.all(14.0),
+                    child: Center(
+                      child: Badge(
+                        badgeContent: StreamBuilder<
+                                QuerySnapshot<Map<String, dynamic>>>(
+                            stream: FirebaseFirestore.instance
+                                .collection("users-cart-items")
+                                .doc(FirebaseAuth.instance.currentUser!.email)
+                                .collection("items")
+                                .snapshots(),
+                            builder:
+                                (BuildContext context, AsyncSnapshot snapshot) {
+                              if (snapshot.hasError) {
+                                Text("Errour");
+                              }
+                              if (!snapshot.hasData) {
+                                const Center(
+                                  child: CircularProgressIndicator(
+                                    color: Colors.amber,
+                                  ),
+                                );
+                              }
+                              // count = (snapshot.data as List).length.toString();
+                              // log(snapshot.data!.docs.length.toString());
+                              return Text(
+                                  snapshot.data?.docs.length.toString() ?? "");
+                            }),
+                        animationDuration: const Duration(milliseconds: 300),
+                        child: GestureDetector(
+                            onTap: () => Get.to(() => const Carts()),
+                            child: const Icon(Icons.shopping_bag_outlined)),
+                      ),
+                    ),
+                  )
+                  /* IconBtnWithCounter(
+                    svgSrc: "assets/images/trash-svgrepo-com (1).svg",
+                    press: () => Get.to(() => Carts()),
+                  ),*/
+                ],
+              ),
+            ),
+            /*Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Row(
                 children: [
@@ -118,7 +173,7 @@ class _HomeState extends State<Home> {
                   )
                 ],
               ),
-            ),
+            ),*/
             const SizedBox(
               height: 18,
             ),
@@ -441,6 +496,96 @@ class _HomeState extends State<Home> {
             // )),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class SearchField extends StatelessWidget {
+  const SearchField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: SizeConfig.screenWidth * 0.7,
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 174, 202, 175).withOpacity(0.3),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: TextField(
+        onChanged: (value) => print(value),
+        decoration: InputDecoration(
+            contentPadding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(20),
+                vertical: getProportionateScreenWidth(9)),
+            border: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            hintText: "Search product",
+            prefixIcon: Icon(Icons.search)),
+      ),
+    );
+  }
+}
+
+class IconBtnWithCounter extends StatelessWidget {
+  const IconBtnWithCounter({
+    Key? key,
+    required this.svgSrc,
+    this.numOfitem = 0,
+    required this.press,
+  }) : super(key: key);
+
+  final String svgSrc;
+  final int numOfitem;
+  final GestureTapCallback press;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(100),
+      onTap: press,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            padding: EdgeInsets.all(getProportionateScreenWidth(12)),
+            height: getProportionateScreenWidth(46),
+            width: getProportionateScreenWidth(46),
+            decoration: BoxDecoration(
+              color: Color.fromARGB(255, 174, 202, 175).withOpacity(0.3),
+              shape: BoxShape.circle,
+            ),
+            child: SvgPicture.asset(svgSrc),
+          ),
+          if (numOfitem != 0)
+            Positioned(
+              top: -3,
+              right: 0,
+              child: Container(
+                height: getProportionateScreenWidth(16),
+                width: getProportionateScreenWidth(16),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFF4848),
+                  shape: BoxShape.circle,
+                  border: Border.all(width: 1.5, color: Colors.white),
+                ),
+                child: Center(
+                  child: Text(
+                    "$numOfitem",
+                    style: TextStyle(
+                      fontSize: getProportionateScreenWidth(10),
+                      height: 1,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            )
+        ],
       ),
     );
   }

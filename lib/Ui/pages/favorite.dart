@@ -1,34 +1,99 @@
-import 'dart:developer';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter/material.dart';
 
+// class favorite extends StatefulWidget {
+//   const favorite({Key? key}) : super(key: key);
+
+//   @override
+//   State<favorite> createState() => _favoriteState();
+// }
+
+// class _favoriteState extends State<favorite> {
+//   var inputtext = "";
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: SafeArea(
+//           child: Padding(
+//         padding: const EdgeInsets.all(20.0),
+//         child: Column(
+//           children: [
+//             TextFormField(
+//               onChanged: (value) {
+//                 setState(() {
+//                   inputtext = value;
+//                   print(inputtext);
+//                 });
+//               },
+//             ),
+//             Expanded(
+//                 child: Container(
+//               child: StreamBuilder(
+//                   stream: FirebaseFirestore.instance
+//                       .collection("produits")
+//                       .where("name", isLessThanOrEqualTo: inputtext)
+//                       .snapshots(),
+//                   builder: (BuildContext context,
+//                       AsyncSnapshot<QuerySnapshot> snapshot) {
+//                     if (snapshot.hasError) {
+//                       return const Center(
+//                         child: Text("Somtigns has erour"),
+//                       );
+//                     }
+//                     if (snapshot.connectionState == ConnectionState.waiting) {
+//                       return const Center(
+//                         child: CircularProgressIndicator(
+//                           color: Colors.green,
+//                         ),
+//                       );
+//                     }
+//                     return Padding(
+//                       padding: const EdgeInsets.all(18.0),
+//                       child: ListView(
+//                         children:
+//                             snapshot.data!.docs.map((DocumentSnapshot doc) {
+//                           Map<String, dynamic> data =
+//                               doc.data() as Map<String, dynamic>;
+//                           return Card(
+//                             elevation: 5,
+//                             child: ListTile(
+//                               title: Text(data["name"]),
+//                               leading: Image.network(data["img"]),
+//                             ),
+//                           );
+//                         }).toList(),
+//                       ),
+//                     );
+//                   }),
+//             ))
+//           ],
+//         ),
+//       )),
+//     );
+//   }
+// }
 import 'package:badges/badges.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_sta/Core/Widget/Cart_provder.dart';
-import 'package:flutter_sta/Ui/bottom_nav_pages/bottom_navbar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-class Carts extends StatefulWidget {
-  const Carts({Key? key}) : super(key: key);
+class Favorite extends StatefulWidget {
+  const Favorite({Key? key}) : super(key: key);
 
   @override
-  State<Carts> createState() => _CartsState();
+  State<Favorite> createState() => _FavoriteState();
 }
 
-class _CartsState extends State<Carts> {
+class _FavoriteState extends State<Favorite> {
   @override
   Widget build(BuildContext context) {
-    final cart = Provider.of<CartProvider>(context, listen: false);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.transparent,
 
-        title: const Text(" Your Carts"),
+        title: const Text(" Your Favorite product"),
         //  title: Text(Widget._produit[]),
         centerTitle: true,
         titleTextStyle: TextStyle(fontSize: 29, color: Colors.green.shade200),
@@ -40,7 +105,7 @@ class _CartsState extends State<Carts> {
                 badgeContent: StreamBuilder<
                         QuerySnapshot<Map<String, dynamic>>>(
                     stream: FirebaseFirestore.instance
-                        .collection("users-cart-items")
+                        .collection("users-favorite-items")
                         .doc(FirebaseAuth.instance.currentUser!.email)
                         .collection("items")
                         .snapshots(),
@@ -60,7 +125,7 @@ class _CartsState extends State<Carts> {
                       return Text(snapshot.data?.docs.length.toString() ?? "");
                     }),
                 animationDuration: const Duration(milliseconds: 300),
-                child: const Icon(Icons.shopping_bag_outlined),
+                child: const Icon(Icons.favorite),
               ),
             ),
           )
@@ -82,7 +147,7 @@ class _CartsState extends State<Carts> {
       body: SafeArea(
         child: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
             stream: FirebaseFirestore.instance
-                .collection("users-cart-items")
+                .collection("users-favorite-items")
                 .doc(FirebaseAuth.instance.currentUser!.email)
                 .collection("items")
                 .snapshots(),
@@ -129,7 +194,7 @@ class _CartsState extends State<Carts> {
                               onDismissed: (direction) {
                                 setState(() {
                                   FirebaseFirestore.instance
-                                      .collection("users-cart-items")
+                                      .collection("users-favorite-items")
                                       .doc(FirebaseAuth
                                           .instance.currentUser!.email)
                                       .collection("items")
@@ -138,48 +203,49 @@ class _CartsState extends State<Carts> {
                                   //cart.removecounter();
                                 });
                               },
-                              child: Row(
-                                children: [
-                                  SizedBox(
-                                    width: 99,
-                                    child: AspectRatio(
-                                      aspectRatio: 0.80,
-                                      child: Container(
-                                        padding: const EdgeInsets.all(10),
-                                        decoration: BoxDecoration(
-                                            color: const Color(0XFFF5F6F9),
-                                            borderRadius:
-                                                BorderRadius.circular(16)),
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                    color: Color.fromARGB(255, 208, 210, 216)
+                                        .withOpacity(.5),
+                                    borderRadius: BorderRadius.circular(16)),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 99,
+                                      child: AspectRatio(
+                                        aspectRatio: 1.0,
                                         child: Image.network(
                                             _documentSnapshot["img"]),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(_documentSnapshot["name"],
-                                          style: const TextStyle(
-                                              fontSize: 17,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold)),
-                                      Text.rich(TextSpan(
-                                          text:
-                                              "\$${_documentSnapshot["prix"]}",
-                                          style: const TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              color: Colors.green),
-                                          children: const [
-                                            TextSpan(
-                                                text: " * 2",
-                                                style: TextStyle(
-                                                    color: Colors.grey))
-                                          ])),
-                                    ],
-                                  )
-                                ],
+                                    const SizedBox(
+                                      width: 20,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(_documentSnapshot["name"],
+                                            style: const TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.bold)),
+                                        Text.rich(TextSpan(
+                                            text:
+                                                "\$${_documentSnapshot["prix"]}",
+                                            style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.green),
+                                            children: const [
+                                              TextSpan(
+                                                  text: " * 2",
+                                                  style: TextStyle(
+                                                      color: Colors.grey,
+                                                      fontSize: 16))
+                                            ])),
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
                             )
                           ],
