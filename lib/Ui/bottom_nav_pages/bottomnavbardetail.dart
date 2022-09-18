@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sta/Ui/pages/detailproduct.dart';
 
 class bottomnavbardetail extends StatelessWidget {
   var _produits;
-   VoidCallback  press ;
-  bottomnavbardetail(this._produits,this.press, {Key? key, required } ) : super(key: key);
+  VoidCallback press;
+  bottomnavbardetail(this._produits, this.press, {required});
 
   @override
   Widget build(BuildContext context) {
@@ -26,20 +27,22 @@ class bottomnavbardetail extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           RichText(
-              textAlign: TextAlign.start,
-              text: TextSpan(
-                  text: "\$ ${_produits.toString()}",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 19,
-                      color: Color.fromARGB(255, 174, 202, 175)))),
+            textAlign: TextAlign.start,
+            text: TextSpan(
+                text: "\$ ${_produits.toString()}",
+                style: TextStyle(
+                    color: primaryColor.withOpacity(0.65),
+                    fontSize: 30.00,
+                    fontWeight: FontWeight.w500)),
+          ),
           ElevatedButton.icon(
             style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all<Color>(
                   Colors.white,
                 ),
                 backgroundColor: MaterialStateProperty.all<Color>(
-                  const   Color.fromARGB(255, 174, 202, 175)),
+                  primaryColor.withOpacity(0.65),
+                ),
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)))),

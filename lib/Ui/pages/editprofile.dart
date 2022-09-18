@@ -28,7 +28,7 @@ class EdetinProfile extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            RaisedButton(
+            MaterialButton(
               padding: const EdgeInsets.symmetric(horizontal: 50),
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20)),
@@ -37,7 +37,7 @@ class EdetinProfile extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 14, letterSpacing: 2.2, color: Colors.black)),
             ),
-            RaisedButton(
+            MaterialButton(
               onPressed: () {
                 UpdateData();
               },
